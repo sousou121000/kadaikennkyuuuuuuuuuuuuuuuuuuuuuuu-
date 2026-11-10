@@ -79,10 +79,10 @@ text-decoration: underline;
 .fade-in{
     opacity: 0;
     transform: translateY(30px);
-    transition: opacity 0.9s ease-out,tranform 0.8s ease-out;
+    transition: opacity 0.9s ease-out, transform 0.8s ease-out;
 }
 
-.fade-in.is-vivible {
+.fade-in.is-visible {
     opacity: 1;
     transform: translateY(0);
 }
