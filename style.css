@@ -43,4 +43,46 @@ box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 /*フッダー（黒系統のやつ）*/
-.emregency-footer: linear-gradient(180deg, #f4f4f4 0%, #e0e0e0 24.5%, )
+.emregency-footer {
+background: linear-gradient(180deg, #f4f4f4 0%, #e0e0e0 24.5%,#424242 60%, #1a1a1a 100% );
+padding: 60px 0 40px 0;
+margin-top: 50px;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.footer-links a {
+color: #cfd8dc;
+text-decoration: none;
+font-size: 0.9rem;
+transition: color 0.4s;
+}
+
+.footer-links a:hover {
+color: #fff;
+text-decoration: underline;
+}
+
+.footer-copyreght {
+    color: #ff8a80;
+    font-size: 0.87rem;
+    font-weight: bold;
+}
+
+/*スクロールアニメーションのコード(下から浮かび上がる)*/
+
+.fade-in{
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.9s ease-out,tranform 0.8s ease-out;
+}
+
+.fade-in.is-vivible {
+    opacity: 1;
+    transform: translateY(0);
+}
