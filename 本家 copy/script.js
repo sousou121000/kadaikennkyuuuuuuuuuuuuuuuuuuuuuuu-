@@ -1,23 +1,25 @@
-
 const tracks = document.querySelectorAll(".reel-track");
 const slotResult = document.getElementById("slotResult");
+const scoreDisplay = document.getElementById("scoreDisplay");
 
 const winOverlay = document.getElementById("winOverlay");
 const effectTitle = document.getElementById("effectTitle");
 const effectMessage = document.getElementById("effectMessage");
 const effectWords = document.getElementById("effectWords");
 
-// スロットに使用する画像
+// スロットに使用する画像（4種類目として minikyara.jpg を追加）
 const images = [
     "taihu.jpg",
     "zisin.jpg",
-    "tunami.jpg"
+    "tunami.jpg",
+    "minikyara.jpg"
 ];
 
 const imageNames = [
     "台風",
     "地震",
-    "津波"
+    "津波",
+    "ミニキャラ"
 ];
 
 const reelCount = 3;
@@ -31,7 +33,8 @@ let results = [];
 let imageHeight = 180;
 let stopIndex = 0;
 
-// 連続ハズレ回数
+// ポイントと連続ハズレ回数
+let score = 0;
 let missCount = 0;
 
 // ゲームの状態
@@ -47,8 +50,8 @@ function createReels() {
     tracks.forEach((track) => {
         track.innerHTML = "";
 
-        // 同じ画像を繰り返して並べる
-        for (let i = 0; i < 30; i++) {
+        // 同じ画像を繰り返して並べる（4の倍数にしておくと切れ目が自然）
+        for (let i = 0; i < 32; i++) {
             const img = document.createElement("img");
             const imageIndex = i % images.length;
 
@@ -165,23 +168,38 @@ document.addEventListener("keydown", (event) => {
 
 
 // 3つの絵柄がそろったか判定
+// 3つの絵柄がそろったか判定
 function checkResult() {
 
     const isWin =
         results[0] === results[1] &&
         results[1] === results[2];
 
-    // 大当たり
+    // どれかの絵柄が3つそろった場合
     if (isWin) {
         missCount = 0;
 
-        slotResult.textContent = "大当たり！！";
+        const isMiniKyara = images[results[0]] === "minikyara.jpg";
 
-        showOverlay(
-            "jackpot",
-            "大当たり！！！！",
-            "3つそろった！！おめでとう！！"
-        );
+        if (isMiniKyara) {
+
+            score += 2;
+            scoreDisplay.textContent = `ポイント: ${score} pt`;
+            slotResult.textContent = "大当たり！！(+2pt)";
+
+            showOverlay(
+                "jackpot",
+                "大当たり！！！！",
+                `+2ポイント獲得！（合計 ${score} pt）` );
+        } else {
+            // それ以外の絵柄は1ポイント加算のみ（演出画面は出さない）
+            score += 1;
+            scoreDisplay.textContent = `ポイント: ${score} pt`;
+            slotResult.textContent = "当たり！(+1pt) Aキーで再挑戦";
+
+            // 演出画面が出ないので、そのままAキーで再挑戦できるようにする
+            gameState = "ready";
+        }
 
         return;
     }
@@ -211,15 +229,13 @@ function checkResult() {
     gameState = "ready";
 }
 
-
-// 演出を表示する
 function showOverlay(type, title, message) {
 
     gameState = "overlay";
 
     winOverlay.className = "win-overlay active";
 
-    // あおり演出の場合
+
     if (type === "taunt") {
         winOverlay.classList.add("taunt");
     }
@@ -230,8 +246,6 @@ function showOverlay(type, title, message) {
     createEffectWords(type);
 }
 
-
-// 演出画面に文字を表示する
 function createEffectWords(type) {
 
     effectWords.innerHTML = "";
@@ -253,7 +267,8 @@ function createEffectWords(type) {
             "大当たり！",
             "やった！",
             "ドパドパ！",
-            "大成功！"
+            "大成功！",
+            "ポイントGET！"
         ];
     }
 
@@ -275,8 +290,6 @@ function createEffectWords(type) {
     }
 }
 
-
-// ENTERキーで演出を終了
 function closeOverlay() {
 
     winOverlay.classList.remove("active");
@@ -288,7 +301,7 @@ function closeOverlay() {
 }
 
 
-// ゲームを最初からやり直す
+
 function resetGame() {
 
     positions = [0, 0, 0];
@@ -308,6 +321,6 @@ function resetGame() {
 }
 
 
-// 初期設定
+
 createReels();
 animateReels();
