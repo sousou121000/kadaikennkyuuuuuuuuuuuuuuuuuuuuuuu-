@@ -7,7 +7,7 @@ const effectTitle = document.getElementById("effectTitle");
 const effectMessage = document.getElementById("effectMessage");
 const effectWords = document.getElementById("effectWords");
 
-// スロットに使用する画像（4種類目として minikyara.jpg を追加）
+// スロットに使用する画像
 const images = [
     "taihu.jpg",
     "zisin.jpg",
@@ -23,7 +23,7 @@ const imageNames = [
 ];
 
 const reelCount = 3;
-const stopDuration = 1400;
+const spinSpeed = 18; // 回転速度（数値を大きくすると速くなります）
 
 // リールの状態
 let positions = [0, 0, 0];
@@ -39,7 +39,6 @@ let missCount = 0;
 
 // ゲームの状態
 // spinning：回転中
-// settling：停止結果の判定中
 // ready：再挑戦待ち
 // overlay：演出表示中
 let gameState = "spinning";
@@ -50,7 +49,7 @@ function createReels() {
     tracks.forEach((track) => {
         track.innerHTML = "";
 
-        // 同じ画像を繰り返して並べる（4の倍数にしておくと切れ目が自然）
+        // 同じ画像を繰り返して並べる
         for (let i = 0; i < 32; i++) {
             const img = document.createElement("img");
             const imageIndex = i % images.length;
@@ -75,7 +74,7 @@ function animateReels() {
 
     tracks.forEach((track, index) => {
         if (!stopped[index]) {
-            positions[index] += 7;
+            positions[index] += spinSpeed;
             positions[index] %= loopHeight;
 
             track.style.transform =
@@ -87,42 +86,24 @@ function animateReels() {
 }
 
 
-// リールを1つ停止する
+// リールを1つ停止する（目押し仕様：押した瞬間の絵柄で即停止）
 function stopReel(index) {
-    // 停止する絵柄をランダムに決定
-    const target = Math.floor(Math.random() * images.length);
-
-    results[index] = target;
     stopped[index] = true;
 
     const loopHeight = imageHeight * images.length;
 
-    // 目標の絵柄まで移動する距離
-    let distance =
-        (target * imageHeight - positions[index] % loopHeight + loopHeight)
-        % loopHeight;
+    // 現在の位置から最も近い絵柄の番号を計算（四捨五入で枠にピタッと合わせる）
+    const rawIndex = Math.round(positions[index] / imageHeight);
+    const target = rawIndex % images.length;
 
-    // さらに6周してから停止
-    distance += imageHeight * images.length * 6;
+    results[index] = target;
 
-    const finalPosition = positions[index] + distance;
+    // 絵柄が枠のど真ん中に収まる位置に即座に固定
+    positions[index] = target * imageHeight;
 
-    tracks[index].style.transition =
-        `transform ${stopDuration}ms cubic-bezier(0.15, 0.7, 0.2, 1)`;
-
-    requestAnimationFrame(() => {
-        tracks[index].style.transform =
-            `translateY(-${finalPosition}px)`;
-    });
-
-    // 停止後、位置を整理する
-    setTimeout(() => {
-        positions[index] = finalPosition % loopHeight;
-
-        tracks[index].style.transition = "none";
-        tracks[index].style.transform =
-            `translateY(-${positions[index]}px)`;
-    }, stopDuration);
+    tracks[index].style.transition = "none";
+    tracks[index].style.transform =
+        `translateY(-${positions[index]}px)`;
 }
 
 
@@ -141,13 +122,9 @@ document.addEventListener("keydown", (event) => {
         stopReel(stopIndex);
         stopIndex++;
 
-        // 3つすべて停止したら結果を判定
+        // 3つすべて停止したら即座に結果を判定
         if (stopIndex === reelCount) {
-            gameState = "settling";
-
-            setTimeout(() => {
-                checkResult();
-            }, stopDuration + 100);
+            checkResult();
         }
     }
 
@@ -168,7 +145,6 @@ document.addEventListener("keydown", (event) => {
 
 
 // 3つの絵柄がそろったか判定
-// 3つの絵柄がそろったか判定
 function checkResult() {
 
     const isWin =
@@ -182,7 +158,7 @@ function checkResult() {
         const isMiniKyara = images[results[0]] === "minikyara.jpg";
 
         if (isMiniKyara) {
-
+            // minikyara.jpg のときだけ2ポイント加算＋大当たり演出を表示
             score += 2;
             scoreDisplay.textContent = `ポイント: ${score} pt`;
             slotResult.textContent = "大当たり！！(+2pt)";
@@ -190,14 +166,14 @@ function checkResult() {
             showOverlay(
                 "jackpot",
                 "大当たり！！！！",
-                `+2ポイント獲得！（合計 ${score} pt）` );
+                ` +2ポイント獲得！（合計 ${score} pt）`
+            );
         } else {
             // それ以外の絵柄は1ポイント加算のみ（演出画面は出さない）
             score += 1;
             scoreDisplay.textContent = `ポイント: ${score} pt`;
             slotResult.textContent = "当たり！(+1pt) Aキーで再挑戦";
 
-            // 演出画面が出ないので、そのままAキーで再挑戦できるようにする
             gameState = "ready";
         }
 
@@ -229,13 +205,15 @@ function checkResult() {
     gameState = "ready";
 }
 
+
+// 演出を表示する
 function showOverlay(type, title, message) {
 
     gameState = "overlay";
 
     winOverlay.className = "win-overlay active";
 
-
+    // あおり演出の場合
     if (type === "taunt") {
         winOverlay.classList.add("taunt");
     }
@@ -246,6 +224,8 @@ function showOverlay(type, title, message) {
     createEffectWords(type);
 }
 
+
+// 演出画面に文字を表示する
 function createEffectWords(type) {
 
     effectWords.innerHTML = "";
@@ -290,6 +270,8 @@ function createEffectWords(type) {
     }
 }
 
+
+// ENTERキーで演出を終了
 function closeOverlay() {
 
     winOverlay.classList.remove("active");
@@ -301,7 +283,7 @@ function closeOverlay() {
 }
 
 
-
+// ゲームを最初からやり直す
 function resetGame() {
 
     positions = [0, 0, 0];
@@ -321,6 +303,6 @@ function resetGame() {
 }
 
 
-
+// 初期設定
 createReels();
 animateReels();
