@@ -11,14 +11,15 @@ body {
 
 /* ヘッダー装飾（一番上のh1に適用） */
 h1 {
-    background-image: url("taihu.jpg");
+  background-size: 400px;
+    background-image: url("heda-.jpg");
     /*background: linear-gradient(140deg, #d32f2f 0%, #9a0007 100%);*/
     color: #fff;
     margin: 0 0 30px 0;
-    padding: 20px 10px;
+    padding: 8px 15px;
     border-bottom: 5px solid #7f0000;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    font-size: 4rem;
+    font-size: 3.5rem;
 }
 
 /* 中央寄せとか */
