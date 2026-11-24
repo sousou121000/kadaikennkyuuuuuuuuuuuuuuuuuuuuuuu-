@@ -23,7 +23,7 @@ const imageNames = [
 ];
 
 const reelCount = 3;
-const spinSpeed = 18; // 回転速度（数値を大きくすると速くなります）
+const spinSpeed = 50; // 回転速度（数値を大きくすると速くなります）
 
 // リールの状態
 let positions = [0, 0, 0];

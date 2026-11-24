@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>防サイト</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- カスタムスクロール（ドラッグで動かせる全身ミニキャラ） -->
+<div class="custom-scroll-track" id="scrollTrack">
+    <div class="custom-scroll-chara" id="scrollChara" title="上下にドラッグしてスクロール！">
+        <img src="minikyara.jpg" alt="スクロールキャラ">
+    </div>
+</div>
+
+<!-- ハンバーガーメニュー（右開き） -->
+<div class="hamburger-menu">
+    <input type="checkbox" id="menu-btn-check">
+    <label for="menu-btn-check" class="menu-btn"><span></span></label>
+    <label for="menu-btn-check" class="menu-overlay"></label>
+    <nav class="menu-content">
+        <div class="menu-title">🚨 MENU</div>
+        <ul>
+            <li><a href="#top">🎰 トップへ戻る</a></li>
+            <li><a href="#nankaitorafu">🌏 南海トラフ地震について</a></li>
+            <li><a href="#zisin-taisaku">🛡️ 地震の対策方法</a></li>
+            <li><a href="#taihu">🌀 台風について</a></li>
+            <li><a href="#taihu-taisaku">☔ 台風の対策方法</a></li>
+            <li><a href="#bag-game">🎒 防災バッグ詰め込み挑戦</a></li>
+        </ul>
+    </nav>
+</div>
+
+<header class="site-header">
+    <div class="moving-bg" id="movingBg">
+        <img src="heda-4.jpg" alt="">
+        <img src="heda-4.jpg" alt="">
+    </div>
+
+    <h1 id="top">防サイト</h1>
+
+    <!-- スロットマシン -->
+    <div class="slot-machine">
+        <div class="slot-window">
+            <div class="reel-track"></div>
+        </div>
+
+        <div class="slot-window">
+            <div class="reel-track"></div>
+        </div>
+
+        <div class="slot-window">
+            <div class="reel-track"></div>
+        </div>
+    </div>
+
+    <div id="slotResult">SPACEキーでスタート！</div>
+    <div id="scoreDisplay">ポイント: 0 pt</div>
+
+    <div class="slot-guide">
+        SPACE：停止 ／ A：再挑戦
+    </div>
+</header>
+
+<!-- 緊急防災速報テロップ -->
+<div class="news-ticker">
+    <div class="ticker-badge">🚨 防災速報</div>
+    <div class="ticker-wrap">
+        <div class="ticker-move">
+            <span>【備えあれば憂いなし】非常食と飲料水は最低3日分（できれば1週間分）を用意しよう！</span>
+            <span>⚡ 寝室のタンスや本棚はL字金具や突っ張り棒でしっかり固定！</span>
+            <span>🌊 強い揺れを感じたら、津波警報を待たずにすぐ高台へ避難！</span>
+            <span>🌀 台風接近時は、川や用水路の様子を絶対に見に行かない！</span>
+            <span>🔋 モバイルバッテリーの充電は常に満タンをキープしよう！</span>
+        </div>
+    </div>
+</div>
+
+<!-- 大当たり・あおり演出 -->
+<div id="winOverlay" class="win-overlay">
+    <div class="effect-background"></div>
+    <div id="effectWords"></div>
+
+    <div class="overlay-content">
+        <h2 id="effectTitle"></h2>
+        <p id="effectMessage"></p>
+    </div>
+
+    <div class="enter-guide">
+        ENTERキーで戻る
+    </div>
+</div>
+
+<!-- 右下追従ミニキャラ（クリックで豆知識を喋る） -->
+<div class="mascot-container" id="mascotBtn" title="クリックで防災アドバイス！">
+    <div class="mascot-bubble" id="mascotBubble">
+        ボクをクリックすると防災の豆知識を教えるよ！
+    </div>
+    <img src="minikyara.jpg" alt="防災ミニキャラ" class="mascot-img">
+</div>
+
+<main class="main-wrapper">
+
+    <!-- 南海トラフ地震セクション -->
+    <section class="disaster-section">
+        <h2 id="nankaitorafu">🌏 南海トラフ地震について</h2>
+
+        <div class="center-box">
+            <img src="zisin.jpg" alt="地震の絵" width="500" height="350" class="pop-img">
+        </div>
+
+        <ol>
+            <li class="text-large">南海トラフ</li>
+            <p class="info-text">
+                南海トラフ地震は、駿河湾から日向灘沖にかけてのプレート境界を震源域として概ね<span class="highlight">100～150年間隔</span>で繰り返し発生してきた大規模地震です。<br>
+                科学的に想定される最大クラスの南海トラフ地震（南海トラフ巨大地震）が発生した場合、静岡県から宮崎県にかけての一部では<span class="danger-badge">震度7</span>となる可能性があるほか、関東地方から九州地方にかけての太平洋沿岸の広い地域に<span class="danger-badge">10mを超える大津波</span>の襲来が想定されています。<br>
+                (引用元:<a href="https://www.jma.go.jp/jma/kishou/know/jishin/nteq/index.html" target="_blank">気象庁</a>)
+            </p>
+
+            <li class="text-large">南海トラフによる被害</li>
+            <ul class="damage-list">
+                <li>震度は静岡県から宮崎県の1部で震度7、そのほか周辺の地域で震度6強～6弱</li>
+                <li>津波は関東から九州にかけての太平洋沿岸の広い範囲に10m超の大津波</li>
+            </ul>
+            <div class="center-box">
+                <img src="tunami.jpg" alt="津波の絵" width="500" height="350" class="pop-img">
+            </div>
+
+            <li id="zisin-taisaku" class="text-large">🛡️ 地震の対策方法</li>
+
+            <div class="tactics-grid">
+                <div class="tactic-card">
+                    <h3>🏠 家での対策</h3>
+                    <ul class="check-list">
+                        <li><label><input type="checkbox" class="prep-check"> 家具の固定</label></li>
+                        <li><label><input type="checkbox" class="prep-check"> 配置の工夫</label></li>
+                        <li><label><input type="checkbox" class="prep-check"> ガラスの飛散防止</label></li>
+                        <li><label><input type="checkbox" class="prep-check"> 逃げ口の確保</label></li>
+                        <li><label><input type="checkbox" class="prep-check"> 火災対策</label></li>
+                        <li><label><input type="checkbox" class="prep-check"> 防災バックの準備</label></li>
+                    </ul>
+                </div>
+
+                <div class="tactic-card">
+                    <h3>🗺️ その他の対策</h3>
+                    <ul class="check-list">
+                        <li><label><input type="checkbox" class="prep-check"> ハザードマップの確認</label></li>
+                        <li><label><input type="checkbox" class="prep-check"> 避難場所、避難ルートの確認</label></li>
+                        <li><label><input type="checkbox" class="prep-check"> 家族との連絡方法の確認</label></li>
+                    </ul>
+                </div>
+
+                <div class="tactic-card">
+                    <h3>⚡ 起こった時の対策</h3>
+                    <ul>
+                        <li>姿勢を低くする</li>
+                        <li>火に近づかない</li>
+                        <li>慌てすぎない</li>
+                        <li>川や海に近づかない</li>
+                        <li>「おかしも」を徹底する</li>
+                    </ul>
+                </div>
+            </div>
+        </ol>
+
+        <!-- クリックでめくれる「おかしも」カード -->
+        <div class="okashimo-box">
+            <h3>👆 クリックして「お・か・し・も」を確認しよう！</h3>
+            <div class="okashimo-cards">
+                <div class="flip-card" data-front="お" data-back="押さない！（前の人を押すと将棋倒しになるぞ）">お</div>
+                <div class="flip-card" data-front="か" data-back="駆けない！（走ると転んでケガをするぞ）">か</div>
+                <div class="flip-card" data-front="し" data-back="喋らない！（先生や放送の指示が聞こえなくなるぞ）">し</div>
+                <div class="flip-card" data-front="も" data-back="戻らない！（忘れ物を取りに戻るのは超危険！）">も</div>
+            </div>
+        </div>
+
+        <!-- 地震サバイバル2択クイズ -->
+        <div class="quiz-box">
+            <h3>🚨 緊急2択！地震発生、あなたならどうする？</h3>
+            <p class="quiz-question">Q. 部屋にいるとき、激しい揺れが襲ってきた！最初にとる行動は？</p>
+            <div class="quiz-buttons">
+                <button class="quiz-btn" data-quiz="eq" data-correct="false">A. 急いで玄関から外へ飛び出す！</button>
+                <button class="quiz-btn" data-quiz="eq" data-correct="true">B. 机の下に隠れて頭を守る！</button>
+            </div>
+            <p class="quiz-feedback" id="feedback-eq"></p>
+        </div>
+    </section>
+
+    <!-- 台風セクション -->
+    <section class="disaster-section">
+        <h2 id="taihu">🌀 台風について</h2>
+
+        <div class="center-box">
+            <img src="taihu.jpg" alt="台風の絵" width="500" height="350" class="pop-img">
+        </div>
+
+        <ol>
+            <li class="text-large">台風の概要</li>
+            <p class="info-text">
+                日本国内における台風による主な被害は、<span class="highlight">「風害（暴風）」「水害（大雨・洪水）」「高潮・波浪」</span>の3つに大別され、インフラや農林水産業、人命に甚大な影響を及ぼします。
+            </p>
+
+            <li class="text-large">台風による被害</li>
+            <div class="center-box">
+                <img src="kouzui.jpg" alt="洪水の絵" width="500" height="350" class="pop-img">
+            </div>
+
+            <ul class="damage-list">
+                <li>洪水</li>
+                <li>船舶の乗揚げ事故</li>
+                <li>住宅の全半壊・流失</li>
+            </ul>
+
+            <div class="news-report">
+                <h3>📰 令和8年台風第30号による被害</h3>
+                <ul>
+                    <li>風にあおられて転倒するなどして3人が重軽傷を負ったほか、与那国町で住宅が半壊する被害が1件確認されたことなどが報告された。</li>
+                    <li>竹富町・西表島の仲間港では係留されていた約20隻の船が高潮の被害を受けた。</li>
+                    <li>竹富町の船浮小中学校と小浜小中学校では停電の影響で給食の食材が使用できなくなり、給食の提供を取りやめ臨時休校にすることになった。</li>
+                </ul>
+            </div>
+
+            <li id="taihu-taisaku" class="text-large">☔ 台風の対策方法</li>
+
+            <div class="tactics-grid">
+                <div class="tactic-card">
+                    <h3>🏠 家での対策</h3>
+                    <ul class="check-list">
+                        <li><label><input type="checkbox" class="prep-check"> ガラスの飛散防止</label></li>
+                        <li><label><input type="checkbox" class="prep-check"> 逃げ口の確保</label></li>
+                        <li><label><input type="checkbox" class="prep-check"> 植木鉢などの外に置いているものを家の中に</label></li>
+                        <li><label><input type="checkbox" class="prep-check"> 防災バックの準備</label></li>
+                    </ul>
+                </div>
+
+                <div class="tactic-card">
+                    <h3>🗺️ その他の対策</h3>
+                    <ul class="check-list">
+                        <li><label><input type="checkbox" class="prep-check"> ハザードマップの確認</label></li>
+                        <li><label><input type="checkbox" class="prep-check"> 避難場所、避難ルートの確認</label></li>
+                        <li><label><input type="checkbox" class="prep-check"> 家族との連絡方法の確認</label></li>
+                    </ul>
+                </div>
+
+                <div class="tactic-card">
+                    <h3>⚠️ 起こった時の対策</h3>
+                    <ul>
+                        <li>川や海に近づかない</li>
+                        <li>不要不急の外出を控える</li>
+                    </ul>
+                </div>
+            </div>
+        </ol>
+
+        <!-- 台風サバイバル2択クイズ -->
+        <div class="quiz-box">
+            <h3>🌀 緊急2択！台風直撃中、あなたならどうする？</h3>
+            <p class="quiz-question">Q. 台風が近づいて雨風が激しくなってきた。「田んぼや川の様子が気になる…」どうする？</p>
+            <div class="quiz-buttons">
+                <button class="quiz-btn" data-quiz="ty" data-correct="false">A. 傘をさしてちょっと様子を見に行く</button>
+                <button class="quiz-btn" data-quiz="ty" data-correct="true">B. 絶対に見に行かず、家の中で待機する</button>
+            </div>
+            <p class="quiz-feedback" id="feedback-ty"></p>
+        </div>
+    </section>
+
+    <!-- ミニゲーム：防災バッグ・パッキングチャレンジ -->
+    <section class="disaster-section" id="bag-game">
+        <h2>🎒 実践！防災バッグ詰め込みチャレンジ</h2>
+        <p>制限重量 <strong>10.0kg</strong> 以内で、本当に必要なものだけをバッグに詰め込もう！（クリックで出し入れ）</p>
+
+        <div class="bag-status">
+            <span>現在の重さ: <strong id="bagWeight">0.0</strong> / 10.0 kg</span>
+            <span>防災スコア: <strong id="bagScore">0</strong> 点</span>
+        </div>
+
+        <div class="item-pool" id="itemPool">
+            <button class="pack-item" data-weight="3.0" data-score="30" data-msg="命をつなぐ最重要アイテム！">💧 飲料水(3L) [3.0kg]</button>
+            <button class="pack-item" data-weight="1.5" data-score="25" data-msg="火も水も不要な非常食は神！">🥫 非常食セット [1.5kg]</button>
+            <button class="pack-item" data-weight="0.5" data-score="20" data-msg="停電時の暗闇で超役立つ！">🔦 懐中電灯＆電池 [0.5kg]</button>
+            <button class="pack-item" data-weight="0.4" data-score="20" data-msg="スマホの充電切れは情報遮断につながる！">🔋 モバイルバッテリー [0.4kg]</button>
+            <button class="pack-item" data-weight="0.6" data-score="15" data-msg="避難所のトイレ問題を解決！">🚽 携帯トイレセット [0.6kg]</button>
+            <button class="pack-item" data-weight="0.5" data-score="15" data-msg="ケガの応急処置に必須！">🩹 救急セット・常備薬 [0.5kg]</button>
+            <button class="pack-item" data-weight="2.5" data-score="-20" data-msg="テレビがない避難所ではただの重い箱だ！">🎮 据え置きゲーム機 [2.5kg]</button>
+            <button class="pack-item" data-weight="5.0" data-score="-50" data-msg="避難中に筋トレしてる場合じゃない！">🏋️ 鉄アレイ [5.0kg]</button>
+            <button class="pack-item" data-weight="1.0" data-score="-10" data-msg="水も電気もないと食べられないぞ！">🍜 生麺ラーメン [1.0kg]</button>
+        </div>
+
+        <div id="bagComment" class="bag-comment">アイテムを選んでバッグを完成させよう！</div>
+    </section>
+
+    <!-- 対策チェック完了スタンプ -->
+    <section class="disaster-section progress-section">
+        <h2>📋 あなたの防災準備達成度</h2>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="prepProgressFill"></div>
+        </div>
+        <p id="prepProgressText">チェック数: 0 / 16 項目</p>
+        <div id="masterStamp" class="master-stamp">🏅 防災準備マスター認定！備えは完璧だ！</div>
+    </section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>

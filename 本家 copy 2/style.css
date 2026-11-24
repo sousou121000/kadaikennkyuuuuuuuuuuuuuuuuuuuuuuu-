@@ -1,0 +1,939 @@
+* {
+    box-sizing: border-box;
+}
+
+/* ブラウザ標準のスクロールバーを完全に非表示 */
+html {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE・旧Edge */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none; /* Chrome・Safari・新Edge */
+}
+
+/* マップ方眼紙風の背景デザイン */
+body {
+    margin: 0;
+    font-family: sans-serif;
+    background-color: #014f07;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+        radial-gradient(circle at top, #02750c, #013b05);
+    background-size: 35px 35px, 35px 35px, 100% 100%;
+    color: #ffffff;
+}
+
+a {
+    color: #ffdd00;
+}
+
+/* カスタムスクロール（レールなし・全身ミニキャラのみ） */
+.custom-scroll-track {
+    position: fixed;
+    top: 75px;
+    right: 6px;
+    bottom: 135px;
+    width: 65px;
+    z-index: 95;
+    pointer-events: none;
+}
+
+.custom-scroll-chara {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 65px;
+    height: 110px;
+    pointer-events: auto;
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+    transition: transform 0.1s;
+}
+
+.custom-scroll-chara:hover {
+    transform: scale(1.08);
+}
+
+.custom-scroll-chara:active {
+    cursor: grabbing;
+    transform: scale(1.12);
+}
+
+.custom-scroll-chara img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* 全身が切れないように表示 */
+    border-radius: 10px;
+    border: 2px solid #ffdd00;
+    background: rgba(0, 0, 0, 0.55);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+    pointer-events: none;
+}
+
+/* ヘッダー */
+.site-header {
+    position: relative;
+    height: 320px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #222;
+    color: white;
+}
+
+/* 背景画像 */
+.moving-bg {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    width: 200%;
+    animation: moveBackground 40s linear infinite;
+}
+
+.moving-bg img {
+    width: 50%;
+    height: 100%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+@keyframes moveBackground {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+.site-header::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #0008;
+    z-index: 1;
+}
+
+/* タイトル */
+.site-header h1 {
+    position: relative;
+    z-index: 3;
+    color: white;
+    font-size: 55px;
+    text-shadow: 0 0 12px black;
+}
+
+/* スロットマシン */
+.slot-machine {
+    position: absolute;
+    z-index: 4;
+    left: 25px;
+    top: 45px;
+    display: flex;
+    gap: 10px;
+    padding: 12px;
+    background: #171717;
+    border: 4px solid #d5a629;
+    border-radius: 15px;
+    box-shadow: 0 0 18px #000;
+}
+
+.slot-window {
+    width: 105px;
+    height: 180px;
+    overflow: hidden;
+    background: black;
+    border: 4px solid white;
+    border-radius: 8px;
+    box-shadow: inset 0 0 10px #000;
+}
+
+.reel-track {
+    width: 100%;
+    will-change: transform;
+}
+
+.reel-track img {
+    display: block;
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+/* スロット結果・ポイント表示 */
+#slotResult {
+    position: absolute;
+    z-index: 5;
+    top: 15px;
+    right: 80px;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: right;
+    text-shadow: 2px 2px 5px black;
+}
+
+#scoreDisplay {
+    position: absolute;
+    z-index: 5;
+    top: 48px;
+    right: 80px;
+    color: #ffdd00;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: right;
+    text-shadow: 2px 2px 5px black;
+}
+
+.slot-guide {
+    position: absolute;
+    z-index: 5;
+    right: 80px;
+    bottom: 15px;
+    margin: 0;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    text-shadow: 2px 2px 5px black;
+}
+
+/* 緊急防災速報テロップ */
+.news-ticker {
+    display: flex;
+    align-items: center;
+    background: #111;
+    border-top: 3px solid #ffdd00;
+    border-bottom: 3px solid #ffdd00;
+    height: 42px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.ticker-badge {
+    flex-shrink: 0;
+    background: #d90429;
+    color: #fff;
+    font-weight: bold;
+    padding: 0 16px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    z-index: 2;
+}
+
+.ticker-wrap {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.ticker-move {
+    display: inline-block;
+    padding-left: 100%;
+    animation: tickerFlow 32s linear infinite;
+}
+
+.ticker-move span {
+    display: inline-block;
+    margin-right: 60px;
+    font-weight: bold;
+    color: #ffdd00;
+    font-size: 15px;
+}
+
+@keyframes tickerFlow {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* 右下追従ミニキャラ（全身表示） */
+.mascot-container {
+    position: fixed;
+    right: 85px;
+    bottom: 15px;
+    z-index: 90;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    cursor: pointer;
+    user-select: none;
+}
+
+.mascot-bubble {
+    background: #fff;
+    color: #111;
+    font-weight: bold;
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 10px 14px;
+    border-radius: 14px;
+    border: 3px solid #ffdd00;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    max-width: 230px;
+    margin-bottom: 8px;
+    position: relative;
+    transition: transform 0.2s;
+}
+
+.mascot-bubble::after {
+    content: "";
+    position: absolute;
+    bottom: -11px;
+    right: 22px;
+    border-width: 11px 9px 0;
+    border-style: solid;
+    border-color: #ffdd00 transparent transparent;
+}
+
+.mascot-img {
+    width: 65px;
+    height: 110px;
+    object-fit: contain; /* 全身が切れないように表示 */
+    border-radius: 12px;
+    border: 3px solid #ffdd00;
+    background: rgba(0, 0, 0, 0.65);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+    animation: mascotFloat 2.5s ease-in-out infinite;
+    transition: transform 0.2s;
+}
+
+.mascot-container:hover .mascot-img {
+    transform: scale(1.1) rotate(3deg);
+}
+
+@keyframes mascotFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+/* 本文レイアウト */
+.main-wrapper {
+    max-width: 960px;
+    margin: 30px auto;
+    padding: 0 80px 80px 15px;
+}
+
+.disaster-section {
+    background: rgba(0, 0, 0, 0.45);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 35px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.35);
+}
+
+h2 {
+    margin: 0 0 20px;
+    padding: 8px 15px;
+    background: rgba(255, 255, 255, 0.12);
+    border-left: 7px solid #ffdd00;
+    border-radius: 4px;
+    color: #ffffff;
+}
+
+h3 {
+    margin-top: 0;
+}
+
+.text-large {
+    font-size: 22px;
+    font-weight: bold;
+    color: #ffdd00;
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+
+.info-text {
+    line-height: 1.9;
+    margin: 0 0 15px;
+}
+
+.highlight {
+    background: rgba(255, 221, 0, 0.25);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.danger-badge {
+    display: inline-block;
+    background: #d90429;
+    color: #fff;
+    font-weight: bold;
+    padding: 1px 8px;
+    border-radius: 4px;
+}
+
+ol, ul {
+    line-height: 1.8;
+    padding-right: 10px;
+}
+
+.center-box {
+    text-align: center;
+    margin: 20px auto;
+}
+
+/* 画像のホバーアクション */
+.pop-img {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+    border: 3px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.pop-img:hover {
+    transform: scale(1.04) rotate(-1deg);
+    border-color: #ffdd00;
+    box-shadow: 0 12px 26px rgba(255, 221, 0, 0.35);
+}
+
+/* 対策カードグリッド */
+.tactics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.tactic-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.tactic-card h3 {
+    color: #90e0ef;
+    margin-bottom: 10px;
+}
+
+.check-list {
+    list-style: none;
+    padding-left: 5px;
+}
+
+.check-list label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.check-list input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #ffdd00;
+    cursor: pointer;
+}
+
+/* おかしもカード */
+.okashimo-box {
+    margin-top: 25px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    text-align: center;
+}
+
+.okashimo-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.flip-card {
+    background: #168bd2;
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+    padding: 25px 10px;
+    border-radius: 10px;
+    border: 3px solid white;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s, background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 110px;
+}
+
+.flip-card:hover {
+    transform: translateY(-4px);
+}
+
+.flip-card.flipped {
+    background: #ffdd00;
+    color: #111;
+    font-size: 14px;
+    line-height: 1.4;
+    padding: 10px;
+}
+
+/* 2択クイズ */
+.quiz-box {
+    margin-top: 25px;
+    padding: 20px;
+    background: rgba(230, 57, 70, 0.2);
+    border: 2px solid #ff758f;
+    border-radius: 12px;
+}
+
+.quiz-question {
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.quiz-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.quiz-btn {
+    flex: 1 1 250px;
+    padding: 12px 15px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #111;
+    background: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.quiz-btn:hover {
+    background: #ffdd00;
+}
+
+.quiz-feedback {
+    margin: 12px 0 0;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* 台風被害ニュース枠 */
+.news-report {
+    background: rgba(0, 0, 0, 0.3);
+    border-left: 5px solid #e63946;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+/* 防災バッグミニゲーム */
+.bag-status {
+    display: flex;
+    justify-content: space-between;
+    background: #111;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 18px;
+    margin-bottom: 15px;
+    border: 2px solid #ffdd00;
+}
+
+.item-pool {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.pack-item {
+    padding: 10px 14px;
+    font-size: 15px;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pack-item.selected {
+    background: #ffdd00;
+    color: #111;
+    border-color: #fff;
+    transform: scale(1.03);
+}
+
+.bag-comment {
+    margin-top: 15px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* 達成度プログレスバー */
+.progress-bar-bg {
+    width: 100%;
+    height: 24px;
+    background: #111;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid #fff;
+}
+
+.progress-bar-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #ffdd00, #00f5d4);
+    transition: width 0.3s;
+}
+
+.master-stamp {
+    display: none;
+    margin-top: 15px;
+    padding: 15px;
+    background: #ffdd00;
+    color: #111;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 10px;
+    border: 3px dashed #d90429;
+}
+
+/* ハンバーガーメニュー（右開き） */
+#menu-btn-check {
+    display: none;
+}
+
+.menu-btn {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 102;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    background: #168bd2;
+    border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu-btn span,
+.menu-btn span::before,
+.menu-btn span::after {
+    content: "";
+    position: absolute;
+    width: 28px;
+    height: 3px;
+    background: white;
+    border-radius: 3px;
+}
+
+.menu-btn span::before {
+    transform: translateY(-9px);
+}
+
+.menu-btn span::after {
+    transform: translateY(9px);
+}
+
+.menu-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: #0009;
+}
+
+.menu-content {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 101;
+    width: 280px;
+    height: 100vh;
+    padding: 75px 25px 25px;
+    background: white;
+    transform: translateX(100%);
+    transition: transform 0.3s;
+}
+
+.menu-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 25px;
+    color: #222;
+}
+
+.menu-content ul {
+    padding-left: 20px;
+}
+
+.menu-content li {
+    margin-bottom: 20px;
+}
+
+.menu-content a {
+    color: #222;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+#menu-btn-check:checked ~ .menu-overlay {
+    display: block;
+}
+
+#menu-btn-check:checked ~ .menu-content {
+    transform: translateX(0);
+}
+
+/* 演出画面 */
+.win-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: none;
+    overflow: hidden;
+    color: white;
+    text-align: center;
+}
+
+.win-overlay.active {
+    display: block;
+}
+
+.effect-background {
+    position: absolute;
+    inset: -50%;
+    background: repeating-conic-gradient(
+        #ff0000 0deg 15deg,
+        #ffcc00 15deg 30deg,
+        #ff00cc 30deg 45deg,
+        #3300ff 45deg 60deg
+    );
+    animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#effectWords {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.effect-word {
+    position: absolute;
+    font-size: 35px;
+    font-weight: 900;
+    color: yellow;
+    text-shadow: 3px 3px 5px red;
+    animation: wordMove 1.2s infinite alternate;
+}
+
+@keyframes wordMove {
+    from {
+        transform: scale(0.7) rotate(-10deg);
+    }
+    to {
+        transform: scale(1.3) rotate(10deg);
+    }
+}
+
+.overlay-content {
+    position: absolute;
+    z-index: 3;
+    top: 50%;
+    left: 50%;
+    width: 90%;
+    padding: 30px;
+    transform: translate(-50%, -50%);
+    background: #000b;
+    border: 5px solid white;
+    border-radius: 20px;
+    text-shadow: 3px 3px 5px black;
+}
+
+.overlay-content h2 {
+    margin: 0 0 20px;
+    padding: 0;
+    background: none;
+    border: none;
+    color: yellow;
+    font-size: clamp(30px, 6vw, 65px);
+}
+
+.overlay-content p {
+    margin: 0;
+    font-size: clamp(20px, 4vw, 35px);
+    font-weight: bold;
+}
+
+.enter-guide {
+    position: absolute;
+    z-index: 5;
+    right: 25px;
+    bottom: 20px;
+    padding: 12px 18px;
+    background: #000c;
+    border: 2px solid white;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0.4;
+    }
+}
+
+/* 10連続ハズレのあおり演出 */
+.win-overlay.taunt .effect-background {
+    background: repeating-conic-gradient(
+        #111 0deg 20deg,
+        #550000 20deg 40deg,
+        #222 40deg 60deg
+    );
+    animation-duration: 8s;
+}
+
+.win-overlay.taunt .overlay-content {
+    background: #180000ee;
+    border-color: #ff3333;
+    animation: tauntShake 0.25s infinite alternate;
+}
+
+.win-overlay.taunt .overlay-content h2 {
+    color: #ff4444;
+}
+
+.win-overlay.taunt .effect-word {
+    color: #ff4444;
+    text-shadow: 3px 3px 5px black;
+}
+
+@keyframes tauntShake {
+    from {
+        transform: translate(-50%, -50%) rotate(-1deg);
+    }
+    to {
+        transform: translate(-50%, -50%) rotate(1deg);
+    }
+}
+
+/* スマホ対応 */
+@media (max-width: 700px) {
+    .site-header {
+        height: 260px;
+    }
+
+    .site-header h1 {
+        position: absolute;
+        right: 75px;
+        top: 105px;
+        margin: 0;
+        font-size: 30px;
+    }
+
+    .slot-machine {
+        left: 8px;
+        top: 45px;
+        gap: 5px;
+        padding: 7px;
+        border-width: 3px;
+    }
+
+    .slot-window {
+        width: 65px;
+        height: 130px;
+    }
+
+    .reel-track img {
+        height: 130px;
+    }
+
+    #slotResult {
+        top: 10px;
+        right: 75px;
+        font-size: 12px;
+    }
+
+    #scoreDisplay {
+        top: 32px;
+        right: 75px;
+        font-size: 15px;
+    }
+
+    .slot-guide {
+        right: 75px;
+        bottom: 8px;
+        font-size: 11px;
+    }
+
+    .enter-guide {
+        right: 10px;
+        bottom: 10px;
+        font-size: 14px;
+    }
+
+    .effect-word {
+        font-size: 23px;
+    }
+
+    .okashimo-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .custom-scroll-track,
+    .custom-scroll-chara {
+        width: 48px;
+    }
+
+    .custom-scroll-chara {
+        height: 82px;
+    }
+
+    .mascot-container {
+        right: 62px;
+    }
+
+    .mascot-img {
+        width: 48px;
+        height: 82px;
+    }
+
+    .mascot-bubble {
+        font-size: 11px;
+        max-width: 170px;
+    }
+
+    .main-wrapper {
+        padding-right: 62px;
+    }
+}
